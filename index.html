@@ -1,0 +1,51 @@
+<style>
+    td, button {
+        width: 40px;
+        height: 40px;
+    }
+
+    button{
+        outline: none;
+        border: 0.5px solid black;
+        background-color: #B1543C;
+        cursor: pointer;
+    }
+    
+    a.disabled{
+        color:#727272;
+        pointer-events: none;
+    }
+
+    .square{
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin-right: 2px;
+    }
+    p{ display: inline-block;}
+</style>
+start: bottom left<br>
+finish: top right <br>
+size: <input type="number" min="1" value="8" onchange="resize(this.value)"><br>
+<p id="status">status: unsolved</p>
+<span style="cursor:not-allowed;"><a href="javascript:solve()">solve</a></span>
+<table style="border:1px solid black;" cellpadding="0" border="0" align="center" cellspacing="0"></table>
+<div style="position:fixed;top:5px;right:5px;border:1px solid black;padding:0 15px;vertical-align:center;">
+    <h2 style="margin:8px;">legend</h2>
+    <span class="square" style="background-color: #B1543C;"></span>
+    <p>wall</p>
+    <br>
+    <span class="square" style="background-color: #6FA036;"></span>
+    <p>open space</p>
+    <br>
+    <span class="square" style="background-color: #295970;"></span>
+    <p>visited</p>
+    <br>
+    <span class="square" style="background-color: #EAEAEA;"></span>
+    <p>finish</p>
+    <br>
+    <span class="square" style="background-color: #191919;"></span>
+    <p>current</p>
+</div>
+
+<script type="text/javascript" src="main.js"></script>
