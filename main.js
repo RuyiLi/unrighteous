@@ -53,14 +53,19 @@ const solve = async () => {
     //right = 180
     //down = 270
     let facing = 0;
+    let p = ''
     while(queue.length){
         let [x,y] = queue.shift();
+        if(++visited[y][x] > 4){
+            p = 'UNSOLVABLE';
+            break;
+        }
         g[y][x].backgroundColor = GREY;
 
-        const p = await (new Promise(res => {
+        p = await (new Promise(res => {
             if(x === SIZE-1 && y === SIZE-1) return res('SOLVED')
             const move = (iter) => {
-                console.log(`(${x+1}, ${y+1}) Facing ${['left', 'up', 'right', 'down'][facing/90]}`);
+                console.log(`(${x+1}, ${y+1}) Facing ${['left', 'up', 'right', 'down'][facing/90]} //${iter}//`);
                 if(iter>4) return false;
                 if(facing === 0){
                     if(iter+1&&within(x, y-1) && g[y-1][x].backgroundColor !== RED){
@@ -70,10 +75,7 @@ const solve = async () => {
                         facing = 90;
                         return move(iter+1);
                     }else{
-                        visited[y][x-1]++;
-        
-                        if(visited[y][x-1] > 4) setTimeout(() => res('UNSOLVABLE'), 300);
-                        else queue.push([x-1, y]);
+                        queue.push([x-1, y]);
                         return true;
                     }
                 }
@@ -85,10 +87,7 @@ const solve = async () => {
                         facing = 180;
                         return move(iter+1);
                     }else{
-                        visited[y+1][x]++;
-        
-                        if(visited[y+1][x] > 4) setTimeout(() => res('UNSOLVABLE'), 300);
-                        else queue.push([x, y+1]);
+                        queue.push([x, y+1]);
                         return true;
                     }
                 }
@@ -100,10 +99,7 @@ const solve = async () => {
                         facing = 270;
                         return move(iter+1);
                     }else{
-                        visited[y][x+1]++;
-        
-                        if(visited[y][x+1] > 4) setTimeout(() => res('UNSOLVABLE'), 300);
-                        else queue.push([x+1, y]);
+                        queue.push([x+1, y]);
                         return true;
                     }
                 }
@@ -116,31 +112,25 @@ const solve = async () => {
                         facing = 0;
                         return move(iter+1);
                     }else{
-                        visited[y-1][x]++;
-        
-                        if(visited[y-1][x] > 4) setTimeout(() => res('UNSOLVABLE'), 300);
-                        else queue.push([x, y-1]);
+                        queue.push([x, y-1]);
                         return true;
                     }
                 }
             }
             let mm = move(0);
             if(!mm) setTimeout(() => res('NO MOVES AVAILABLE'), 300);
-            
-            setTimeout(() => res(), 200);
+            else setTimeout(() => res(), 200);
         }));
         g[y][x].backgroundColor = BLUE;
-        if(p) console.log(p); //p&&console.log(p)
-        if(p === 'SOLVED'){
-            g[y][x].backgroundColor = WHITE;
-            status.innerHTML = 'solved';
-            break;
-        }else if(p === 'UNSOLVABLE')
-            status.innerHTML = 'unsolvable';
-        else if(p === 'NO MOVES AVAILABLE')
-            status.innerHTML = 'cannot move';
-        
     }
+    if(p) console.log(p); //p&&console.log(p)
+    if(p === 'SOLVED'){
+        g[SIZE-1][SIZE-1].backgroundColor = WHITE;
+        status.innerHTML = 'solved';
+    }else if(p === 'UNSOLVABLE')
+        status.innerHTML = 'unsolvable';
+    else if(p === 'NO MOVES AVAILABLE')
+        status.innerHTML = 'cannot move';
     $('a').classList.remove('disabled');
 }
 
